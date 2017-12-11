@@ -1,6 +1,6 @@
 <?php
 /**
- * Enabx - Variable Subscription Admin
+ * EBANX - Variable Subscription Admin
  * @package WordPress
  * @subpackage Ebanx Payment Gateway
  * @author Shazzad Hossain Khan
