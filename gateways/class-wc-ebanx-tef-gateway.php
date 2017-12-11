@@ -12,11 +12,10 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	public function __construct()
 	{
 		$this->id           = 'ebanx-tef';
-		$this->method_title = __('EBANX - TEF', 'woocommerce-gateway-ebanx');
-
-		$this->api_name = 'tef';
-		$this->title       = 'Débito Online';
-		$this->description = 'Selecione o seu banco. A seguir, você será redirecionado para concluir o pagamento pelo seu internet banking.';
+		$this->method_title = __('EBANX - TEF', 'woocommerce-gateway-ebanx' );
+		$this->api_name 	= 'tef';
+		$this->title       	= __('Online Debit', 'woocommerce-gateway-ebanx' );
+		$this->description 	= __('Select your bank. You will then be redirected to complete the payment for your internet banking.', 'woocommerce-gateway-ebanx' );
 
 		parent::__construct();
 
@@ -76,8 +75,8 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	{
 		$data = array(
 			'data' => array(
-				'bank_name' => get_post_meta($order->id, '_ebanx_tef_bank', true),
-				'customer_name' => get_post_meta($order->id, '_billing_first_name', true)
+				'bank_name' => get_post_meta($order->get_id(), '_ebanx_tef_bank', true),
+				'customer_name' => get_post_meta($order->get_id(), '_billing_first_name', true)
 			),
 			'order_status' => $order->get_status(),
 			'method' => 'tef'
@@ -95,7 +94,7 @@ class WC_EBANX_Tef_Gateway extends WC_EBANX_Redirect_Gateway
 	 */
 	protected function save_order_meta_fields($order, $request)
 	{
-		update_post_meta($order->id, '_ebanx_tef_bank', sanitize_text_field(WC_EBANX_Request::read('tef')));
+		update_post_meta($order->get_id(), '_ebanx_tef_bank', sanitize_text_field(WC_EBANX_Request::read('tef')));
 
 		parent::save_order_meta_fields($order, $request);
 	}

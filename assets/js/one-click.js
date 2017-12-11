@@ -16,15 +16,7 @@ jQuery(document).ready(function ($) {
 
   var removeError = function (el) {
     $(el).removeClass('is-invalid');
-  };
-
-  tooltip.keypress(function(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      form.submit();
-    }
-    return true;
-  });
+  }
 
   button.on('click', function (e) {
     e.preventDefault();
@@ -36,9 +28,10 @@ jQuery(document).ready(function ($) {
     tooltip.removeClass('is-active');
   });
 
-  form.on('submit', function () {
+  payButton.on('click', function () {
     payButton.text(payButton.attr('data-processing-label')).attr('disabled', 'disabled');
-    return true;
+  
+    form.submit();
   });
 
   cvv.on('keyup', function () {

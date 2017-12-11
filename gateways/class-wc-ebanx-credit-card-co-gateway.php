@@ -4,23 +4,25 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway
-{
+class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
+
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$this->id = 'ebanx-credit-card-co';
-		$this->method_title = __('EBANX - Credit Card Colombia', 'woocommerce-gateway-ebanx');
-		$this->currency_code = WC_EBANX_Constants::CURRENCY_CODE_COP;
-
-		$this->title = 'Tarjeta de Crédito';
-		$this->description = 'Pay with credit card.';
+		$this->id 				= 'ebanx-credit-card-co';
+		$this->method_title 	= __('EBANX - Credit Card Colombia', 'woocommerce-gateway-ebanx');
+		$this->currency_code 	= WC_EBANX_Constants::CURRENCY_CODE_COP;
+		$this->title       		= __('Credit Cart (EBANX)', 'woocommerce-gateway-ebanx' );
+		$this->description 		= __('Pay by credit card.', 'woocommerce-gateway-ebanx' );
 
 		parent::__construct();
 
-		$this->enabled = is_array($this->configs->settings['mexico_payment_methods']) ? in_array($this->id, $this->configs->settings['colombia_payment_methods']) ? 'yes' : false : false;
+		$this->enabled = is_array($this->configs->settings['colombia_payment_methods'])
+			&& in_array($this->id, $this->configs->settings['colombia_payment_methods']) 
+			? 'yes' 
+			: false;
 	}
 
 	/**
@@ -48,11 +50,8 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway
 	public function payment_fields() {
 		parent::payment_fields();
 
-		parent::checkout_rate_conversion(
-			WC_EBANX_Constants::CURRENCY_CODE_COP,
-			true,
-			null,
-			1
-		);
+		if ( ! is_add_payment_method_page() ) {
+			parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_COP, true, null, 1 );
+		}
 	}
 }

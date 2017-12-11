@@ -9,10 +9,10 @@ class WC_EBANX_Errors {
 	public static function get_errors() {
 		return array(
 			'pt-br' => array(
-				'GENERAL'                    => 'Não foi possível concluir a compra. Por favor, tente novamente ou entre em contato com o site.',
-				'BP-DPAR-4'                  => 'Invalid integration key.',
+				'GENERAL'                    => __( 'Your purchase could not be completed. Please try again or contact the website.', 'woocommerce-gateway-ebanx' ),
+				'BP-DPAR-4'                  => __( 'Invalid integration key.', 'woocommerce-gateway-ebanx' ),
 				'BP-DR-13'                   => 'Informe o seu nome completo.',
-				'BP-DR-15'                   => 'Informe um email válido.',
+				'BP-DR-15'                   => __( 'Please enter a valid email address.', 'woocommerce-gateway-ebanx' ),
 				'BP-DR-19'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
 				'BP-DR-20'                   => 'Informe a sua data de nascimento no formato dia/mes/ano, por exemplo, 30/10/1980.',
 				'BP-DR-22'                   => 'O número de documento é obrigatório.',
@@ -38,7 +38,7 @@ class WC_EBANX_Errors {
 				'BP-DR-57'                   => 'A sua data deve estar no formato mes/ano, por exemplo, 12/2020.',
 				'BP-DR-59'                   => 'A data é inferior a permitida.',
 				'BP-DR-61'                   => 'Não foi possível utilizar este cartão de crédito. Contate o site informando este código: BP-DR-61.',
-				'BP-DR-75'                   => 'O número do cartão de crédito é inválido.',
+				'BP-DR-75'                   => __('Credit card number is invalid.'),
 				'BP-DR-77'                   => 'Este país não está habilitado.',
 				'BP-DR-78'                   => 'Este site não vende para este país.',
 				'BP-DR-79'                   => 'O número de parcelas não é permitido, por favor, escolha outro.',
@@ -59,7 +59,7 @@ class WC_EBANX_Errors {
 				'INVALID-FIELDS'             => 'Alguns campos não foram preenchidos corretamente. Por favor, verifique e tente novamente.',
 				'INVALID-BILLING-COUNTRY'    => 'Por favor, escolha um país.',
 				'INVALID-ADDRESS'            => 'Insira o seu endereço completo com o número da casa, apartamento ou estabelecimento.',
-				'REFUSED-CC'                 => 'Não foi possível concluir a compra. Entre em contato com o banco/emissor do cartão ou tente novamente.',
+				'REFUSED-CC'                 => __( 'Your purchase could not be completed. Please contact your bank / card issuer or try again.', 'woocommerce-gateway-ebanx' ),
 				'SANDBOX-INVALID-CC-NUMBER'  => 'Detectamos que você está em modo Sandbox e por isso só permitimos apenas alguns números de cartões. <a href="https://www.ebanx.com/business/en/developers/integrations/testing/credit-card-test-numbers" target="_blank">Você pode utilizar um dos nossos cartões de teste acessando a EBANX Developer\'s Academy.</a>'
 			),
 			'es'    => array(

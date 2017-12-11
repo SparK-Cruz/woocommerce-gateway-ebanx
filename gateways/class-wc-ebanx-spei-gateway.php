@@ -75,8 +75,8 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->id, '_spei_url', $request->payment->spei_url);
-		update_post_meta($order->id, '_payment_due_date', $request->payment->due_date);
+		update_post_meta($order->get_id(), '_spei_url', $request->payment->spei_url);
+		update_post_meta($order->get_id(), '_payment_due_date', $request->payment->due_date);
 	}
 
 	/**
@@ -87,13 +87,13 @@ class WC_EBANX_Spei_Gateway extends WC_EBANX_Gateway
 	 */
 	public static function thankyou_page($order)
 	{
-		$spei_url = get_post_meta($order->id, '_spei_url', true);
+		$spei_url = get_post_meta($order->get_id(), '_spei_url', true);
 		$spei_basic = $spei_url . "&format=basic";
 		$spei_pdf = $spei_url . "&format=pdf";
 		$spei_print = $spei_url . "&format=print";
-		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
-		$customer_name = $order->billing_first_name;
-		$spei_due_date = get_post_meta($order->id, '_payment_due_date', true);
+		$customer_email = get_post_meta($order->get_id(), '_ebanx_payment_customer_email', true);
+		$customer_name = $order->get_billing_first_name();
+		$spei_due_date = get_post_meta($order->get_id(), '_payment_due_date', true);
 
 		$data = array(
 			'data' => array(

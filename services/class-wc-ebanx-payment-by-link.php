@@ -79,15 +79,13 @@ class WC_EBANX_Payment_By_Link {
 	 */
 	private static function send_request() {
 		$data = array(
-			'name'                  => self::$order->billing_first_name . ' ' . self::$order->billing_last_name,
-			'email'                 => self::$order->billing_email,
-			'country'               => strtolower(self::$order->billing_country),
-			'payment_type_code'     => empty(self::$order->payment_method) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[self::$order->payment_method],
-			'merchant_payment_code' => substr(self::$order->id . '_' . md5(time()), 0, 40),
+			'name'                  => self::$order->get_billing_first_name() . ' ' . self::$order->get_billing_last_name(),
+			'email'                 => self::$order->get_billing_email(),
+			'country'               => strtolower(self::$order->get_billing_country()),
+			'payment_type_code'     => empty(self::$order->get_payment_method()) ? '_all' : WC_EBANX_Constants::$GATEWAY_TO_PAYMENT_TYPE_CODE[self::$order->get_payment_method()],
+			'merchant_payment_code' => substr(self::$order->get_id() . '_' . md5(time()), 0, 40),
 			'currency_code'         => strtoupper(get_woocommerce_currency()),
-			'amount'                => self::$order->get_total(),
-			'user_value_1'          => 'from_woocommerce',
-			'user_value_3'          => 'version=' . WC_EBANX::get_plugin_version(),
+			'amount'                => self::$order->get_total()
 		);
 
 		\Ebanx\Config::set(self::$config);

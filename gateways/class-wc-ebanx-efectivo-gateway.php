@@ -75,7 +75,7 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	{
 		parent::save_order_meta_fields($order, $request);
 
-		update_post_meta($order->id, '_efectivo_url', $request->payment->voucher_url);
+		update_post_meta($order->get_id(), '_efectivo_url', $request->payment->voucher_url);
 	}
 
 	/**
@@ -86,12 +86,12 @@ class WC_EBANX_Efectivo_Gateway extends WC_EBANX_Gateway
 	 */
 	public static function thankyou_page($order)
 	{
-		$efectivo_url = get_post_meta($order->id, '_efectivo_url', true);
+		$efectivo_url = get_post_meta($order->get_id(), '_efectivo_url', true);
 		$efectivo_basic = $efectivo_url . "&format=basic";
 		$efectivo_pdf = $efectivo_url . "&format=pdf";
 		$efectivo_print = $efectivo_url . "&format=print";
-		$customer_email = get_post_meta($order->id, '_ebanx_payment_customer_email', true);
-		$efectivo_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+		$customer_email = get_post_meta($order->get_id(), '_ebanx_payment_customer_email', true);
+		$efectivo_hash = get_post_meta($order->get_id(), '_ebanx_payment_hash', true);
 
 		$data = array(
 			'data' => array(

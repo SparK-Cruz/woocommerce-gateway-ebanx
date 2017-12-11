@@ -29,7 +29,7 @@ class WC_EBANX_Capture_Payment {
 		echo '<style>.view.capture::after { font-family: Dashicons; content: "\f316" !important; }</style>';
 	}
 
-	public function add_auto_capture_dropdown($actions) {
+	public static function add_auto_capture_dropdown($actions) {
 		global $theorder;
 
 		if (is_array($actions) && $theorder->get_status() === 'on-hold'
@@ -41,7 +41,7 @@ class WC_EBANX_Capture_Payment {
 		return $actions;
 	}
 
-	public function capture_from_order_dropdown($order) {
+	public static function capture_from_order_dropdown($order) {
 		static::capture_payment($order->get_id());
 	}
 

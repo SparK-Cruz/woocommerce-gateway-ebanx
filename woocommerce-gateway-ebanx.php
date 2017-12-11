@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: EBANX Payment Gateway for WooCommerce
- * Plugin URI: https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin
- * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
- * Author: EBANX
- * Author URI: https://www.ebanx.com/business/en
- * Version: 1.22.0
+ * Plugin Name: WooCommerce EBANX Gateway
+ * Plugin URI: https://w4dev.com
+ * Description: Ebanx Payment Gateway
+ * Author: Shazzad Hossain Khan
+ * Author URI: https://w4dev.com
+ * Version: 1.6
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages
@@ -15,6 +15,11 @@
 
 if ( ! defined('ABSPATH') ) {
 	exit;
+}
+
+// stop collision with other active version
+if( defined('WC_EBANX_MIN_PHP_VER') ) {
+	return '';
 }
 
 define('WC_EBANX_MIN_PHP_VER', '5.6.0');
@@ -60,10 +65,6 @@ if ( ! class_exists('WC_EBANX') ) {
 
 		private static $log;
 
-		private static $my_account_endpoint = 'ebanx-saved-cards';
-
-		private static $my_account_menu_name = 'EBANX - Saved Cards';
-
 		/**
 		 * Initialize the plugin public actions.
 		 */
@@ -103,10 +104,10 @@ if ( ! class_exists('WC_EBANX') ) {
 				add_action('admin_init', array($this, 'checker'), 30);
 			}
 
-			add_action('admin_head', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button_css'));
+			add_action( 'admin_head', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button_css'));
 
-			add_action( 'woocommerce_order_actions', array('WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown'));
-			add_action( 'woocommerce_order_action_ebanx_capture_order', array('WC_EBANX_Capture_Payment', 'capture_from_order_dropdown'));
+			add_action('woocommerce_order_actions', array('WC_EBANX_Capture_Payment', 'add_auto_capture_dropdown'));
+			add_action('woocommerce_order_action_ebanx_capture_order', array('WC_EBANX_Capture_Payment', 'capture_from_order_dropdown'));
 
 			add_action('admin_footer', array('WC_EBANX_Assets', 'render'), 0);
 
@@ -124,18 +125,8 @@ if ( ! class_exists('WC_EBANX') ) {
 			add_action('save_post', array($this, 'ebanx_metabox_payment_link_save'));
 
 			/**
-			 * My account
+			 * My account card section has been removed as WooCommerce already provide card storage feature.
 			 */
-			if ( $configs
-				&& $configs->get_setting_or_default('save_card_data', 'no') === 'yes' ) {
-
-				add_action('init', array($this, 'my_account_endpoint'));
-				add_action('woocommerce_account_' . self::$my_account_endpoint . '_endpoint', array($this, 'my_account_template'));
-
-				add_filter('query_vars', array($this, 'my_account_query_vars'), 0);
-				add_filter('woocommerce_account_menu_items', array($this, 'my_account_menus'));
-				add_filter('the_title', array($this, 'my_account_menus_title'));
-			}
 
 			/**
 			 * Filters
@@ -145,7 +136,9 @@ if ( ! class_exists('WC_EBANX') ) {
 			add_filter('woocommerce_my_account_my_orders_actions', array('WC_EBANX_Cancel_Order', 'add_my_account_cancel_order_action'), 10, 2);
 			add_filter('woocommerce_admin_order_actions', array( 'WC_EBANX_Capture_Payment', 'add_order_capture_button'), 10, 2);
 
-
+			/**
+			 * Payment Tokens
+			 */
 		}
 
 		/**
@@ -234,69 +227,6 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public function enable_i18n() {
 			load_plugin_textdomain('woocommerce-gateway-ebanx', false, WC_EBANX_LANGUAGES_DIR);
-		}
-
-		/**
-		 * It enables the my account page for logged users
-		 *
-		 * @return void
-		 */
-		public function my_account_template()
-		{
-			if ( WC_EBANX_Request::has('credit-card-delete')
-				&& is_account_page() ) {
-				// Find credit cards saved and delete the selected
-				$cards = get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true);
-
-				foreach ($cards as $k => $cd) {
-					if ($cd && in_array($cd->masked_number, WC_EBANX_Request::read('credit-card-delete'))) {
-						unset($cards[$k]);
-					}
-				}
-
-				update_user_meta(get_current_user_id(), '_ebanx_credit_card_token', $cards);
-			}
-
-			$cards = array_filter((array) get_user_meta(get_current_user_id(), '_ebanx_credit_card_token', true), function ($card) {
-				return !empty($card->brand) && !empty($card->token) && !empty($card->masked_number); // TODO: Implement token due date
-			});
-
-			wc_get_template(
-				'my-account/ebanx-credit-cards.php',
-				array(
-					'cards' => (array) $cards,
-				),
-				'woocommerce/ebanx/',
-				WC_EBANX::get_templates_path()
-			);
-		}
-
-		/**
-		 * Mount query vars on my account for credit cards
-		 *
-		 * @param  array $vars
-		 * @return void
-		 */
-		public function my_account_query_vars($vars)
-		{
-			$vars[] = self::$my_account_endpoint;
-
-			return $vars;
-		}
-
-		/**
-		 * It creates a endpoint to my account
-		 *
-		 * @return void
-		 */
-		public function my_account_endpoint()
-		{
-			// My account endpoint
-			add_rewrite_endpoint(self::$my_account_endpoint, EP_ROOT | EP_PAGES);
-
-			add_option('woocommerce_ebanx-global_settings', WC_EBANX_Global_Gateway::$defaults);
-
-			flush_rewrite_rules();
 		}
 
 		/**
@@ -404,46 +334,6 @@ if ( ! class_exists('WC_EBANX') ) {
 		}
 
 		/**
-		 * It enables a tab on WooCommerce My Account page
-		 *
-		 * @param  string $title
-		 * @return string Return the title to show on tab
-		 */
-		public function my_account_menus_title($title)
-		{
-			global $wp_query;
-
-			$is_endpoint = isset($wp_query->query_vars[self::$my_account_endpoint]);
-
-			if ($is_endpoint && !is_admin() && is_main_query() && in_the_loop() && is_account_page()) {
-				$title = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
-				remove_filter('the_title', array($this, 'my_account_menus_title'));
-			}
-
-			return $title;
-		}
-
-		/**
-		 * It enalbes the menu as a tab on My Account page
-		 *
-		 * @param  array $menu The all menus supported by WooCoomerce
-		 * @return array       The new menu
-		 */
-		public function my_account_menus($menu)
-		{
-			// Remove the logout menu item.
-			$logout = $menu['customer-logout'];
-			unset($menu['customer-logout']);
-
-			$menu[self::$my_account_endpoint] = __(self::$my_account_menu_name, 'woocommerce-gateway-ebanx');
-
-			// Insert back the logout item.
-			$menu['customer-logout'] = $logout;
-
-			return $menu;
-		}
-
-		/**
 		 * Return an instance of this class.
 		 *
 		 * @return object A single instance of this class.
@@ -477,6 +367,14 @@ if ( ! class_exists('WC_EBANX') ) {
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-third-party-compability-layer.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-cancel-order.php';
 			include_once WC_EBANX_SERVICES_DIR . 'class-wc-ebanx-capture-payment.php';
+
+			// New
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-common.php';
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-product-switch-admin.php';
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-order-switch.php';
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-order-switch-admin.php';
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-order-recurrence-admin.php';
+			include_once WC_EBANX_SERVICES_DIR . 'subscription/class-wc-ebanx-subscription-misc.php';
 
 			// Gateways
 			include_once WC_EBANX_GATEWAYS_DIR . 'class-wc-ebanx-gateway.php';
@@ -658,8 +556,12 @@ if ( ! class_exists('WC_EBANX') ) {
 		 * @return void
 		 */
 		public function ebanx_metabox_payment_link_save ($post_id) {
-			$order = wc_get_order($post_id);
-			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
+			$order = wc_get_order( $post_id );
+			if( is_a( $order, 'WC_Order' ) ) {
+				$checkout_url = get_post_meta($order->get_id(), '_ebanx_checkout_url', true);
+			} else {
+				$checkout_url = '';
+			}
 
 			// Check if is an EBANX request
 			if ( WC_EBANX_Request::has('create_ebanx_payment_link')
@@ -686,10 +588,10 @@ if ( ! class_exists('WC_EBANX') ) {
 		public function ebanx_metabox_save_post_render_button ($post_id) {
 			$ebanx_currencies = array('BRL', 'USD', 'EUR', 'PEN', 'CLP', 'MXN', 'COP');
 			$order = wc_get_order($post_id);
-			$checkout_url = get_post_meta($order->id, '_ebanx_checkout_url', true);
+			$checkout_url = get_post_meta($order->get_id(), '_ebanx_checkout_url', true);
 
 			if ( !$checkout_url
-				&& in_array($order->status, array('auto-draft', 'pending'))
+				&& in_array($order->get_status(), array('auto-draft', 'pending'))
 				&& in_array(strtoupper(get_woocommerce_currency()), $ebanx_currencies) ) {
 				wc_get_template(
 					'payment-by-link-action.php',
@@ -707,7 +609,7 @@ if ( ! class_exists('WC_EBANX') ) {
 		 * @return void
 		 */
 		public function ebanx_admin_order_details ($order) {
-			$payment_hash = get_post_meta($order->id, '_ebanx_payment_hash', true);
+			$payment_hash = get_post_meta($order->get_id(), '_ebanx_payment_hash', true);
 			if ($payment_hash) {
 
 				wc_get_template(
@@ -715,7 +617,7 @@ if ( ! class_exists('WC_EBANX') ) {
 					array(
 						'order' => $order,
 						'payment_hash' => $payment_hash,
-						'payment_checkout_url' => get_post_meta($order->id, '_ebanx_checkout_url', true),
+						'payment_checkout_url' => get_post_meta($order->get_id(), '_ebanx_checkout_url', true),
 						'is_sandbox_mode' => $this->is_sandbox_mode,
 						'dashboard_link' => "https://dashboard.ebanx.com/" . ($this->is_sandbox_mode ? 'test/' : '') . "payments/?hash=$payment_hash"
 					),

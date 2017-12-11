@@ -50,6 +50,10 @@ class ClientCurl extends AbstractClient
             $this->_setupCurl();
 
             $response = curl_exec($this->curl);
+			
+			#$header_size = curl_getinfo($this->curl, CURLINFO_HEADER_SIZE);
+			#$header = substr($response, 0, $header_size);
+			#print_r( $header ); die();
 
             $allowed_status_codes = array_merge(array(200), $this->ignoredStatusCodes);
 
@@ -57,7 +61,7 @@ class ClientCurl extends AbstractClient
                 if (curl_errno($this->curl)) {
                     throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
                 }
-                throw new \RuntimeException('The HTTP request failed: unknown error.');
+                throw new \RuntimeException('The HTTP request failed: Status code - '. curl_getinfo($this->curl, CURLINFO_HTTP_CODE) );
             }
             curl_close($this->curl);
 
@@ -73,6 +77,8 @@ class ClientCurl extends AbstractClient
      */
     private function _setupCurl()
     {
+		#print_r( $this->action ); die();
+		#print_r( $this->requestParams['request_body'] ); die();
         $requestParams = http_build_query($this->requestParams);
 
         $this->uri = $this->action;
@@ -90,6 +96,8 @@ class ClientCurl extends AbstractClient
 
         // We want to receive the returned data
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+		#curl_setopt($this->curl, CURLOPT_VERBOSE, 1);
+		#curl_setopt($this->curl, CURLOPT_HEADER, 1);
         // Setup custom user agent
         curl_setopt($this->curl, CURLOPT_USERAGENT, 'EBANX PHP Library ' . \Ebanx\Ebanx::VERSION);
     }
