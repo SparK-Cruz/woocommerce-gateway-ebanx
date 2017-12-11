@@ -8,7 +8,7 @@
 **/
 
 
-class WP_Ebanx_Subscription_Product_Switch_Admin {
+class WC_EBANX_Subscription_Product_Switch_Admin {
 
 	function __construct() {
 		add_filter( 'woocommerce_product_data_tabs'						, __CLASS__ .'::product_data_tabs' 			, 10 );
@@ -77,5 +77,5 @@ class WP_Ebanx_Subscription_Product_Switch_Admin {
 }
 
 	# Intialize Admin Page
-	new WP_Ebanx_Subscription_Product_Switch_Admin;
+	new WC_EBANX_Subscription_Product_Switch_Admin;
 ?>

@@ -7,7 +7,7 @@
  * @url https://w4dev.com/about
 **/
 
-class WP_Ebanx_Subscription_Order_Switch_Admin {
+class WC_EBANX_Subscription_Order_Switch_Admin {
 
 	function __construct() {
 		add_action( 'add_meta_boxes'									, __CLASS__ .'::add_meta_boxes'				, 24 );
@@ -112,5 +112,5 @@ class WP_Ebanx_Subscription_Order_Switch_Admin {
 }
 
 	# Intialize Admin Page
-	new WP_Ebanx_Subscription_Order_Switch_Admin;
+	new WC_EBANX_Subscription_Order_Switch_Admin;
 ?>

@@ -8,7 +8,7 @@
 **/
 
 
-class WP_Ebanx_Subscription_Misc {
+class WC_EBANX_Subscription_Misc {
 
 	function __construct() {
 		// virtual subscription product does not need processing
@@ -44,5 +44,5 @@ class WP_Ebanx_Subscription_Misc {
 }
 
 	# Intialize Admin Page
-	new WP_Ebanx_Subscription_Misc;
+	new WC_EBANX_Subscription_Misc;
 ?>
