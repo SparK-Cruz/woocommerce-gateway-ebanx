@@ -80,26 +80,17 @@ jQuery(function($) {
 		onSubmit: function(e) {
 			wc_ebanx_form.removeHiddenInputs();
 
-			//console.log('onSubmit');
-
 			if( wc_ebanx_form.isEBANXPaymentMethod() ) {
-				//console.log('isEBANXPaymentMethod');
-
 				e.preventDefault();
 				e.stopPropagation();
 				e.stopImmediatePropagation();
 
-				// $(document).trigger( 'ebanxErrorCreditCard', response.error.err.status_message );
-
 				if( wc_ebanx_form.isEBANXTokenPayment() ) {
-					// console.log( 'isEBANXTokenPayment' );
 					wc_ebanx_form.block();
 					wc_ebanx_form.form.submit();
 					return true;
 				}
 				else {
-					// console.log('isEBANXNewCard');
-					// console.log( $('#ebanx-card-expiry').val() );
 					var card = $('#ebanx-card-number').val();
 					var expires = $('#ebanx-card-expiry').payment('cardExpiryVal');
 					var cvv = $('#ebanx-card-cvv').val();
@@ -145,7 +136,6 @@ jQuery(function($) {
 		},
 
 		onEBANXReponse: function(response) {
-			// console.log( response );
 			if ( response.data && (response.data.status == 'ERROR' || ! response.data.token )) {
 				$(document).trigger( 'ebanxErrorCreditCard', response.error.err.status_message );
 
