@@ -23,10 +23,9 @@ class WC_EBANX_Subscription_Misc
 	 *
 	 * @param bool $needs_processing
 	 * @param WC_Product $product
-	 * @param int $order
 	 * @return bool
 	 */
-	public static function order_item_needs_processing($needs_processing, $product, $order)
+	public static function order_item_needs_processing($needs_processing, $product)
 	{
 		if ($product->is_type(['subscription', 'subscription_variation']) && $product->is_virtual()) {
 			$needs_processing = false;

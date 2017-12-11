@@ -19,8 +19,6 @@ class WC_EBANX_Subscription_Order_Switch_Admin
 
 	public static function add_meta_boxes()
 	{
-
-		$post_id = get_the_ID();
 		add_meta_box(
 			'woocommerce-subscription-switch',
 			_x('Subscription Switch', 'meta box title', 'woocommerce-subscriptions'),
@@ -73,7 +71,7 @@ class WC_EBANX_Subscription_Order_Switch_Admin
 	 * @param int|WP_Post $post
 	 * @param bool $update
 	 */
-	public static function save_post($post_id, $post, $update)
+	public static function save_post($post_id, $post)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
 			return;
@@ -115,11 +113,12 @@ class WC_EBANX_Subscription_Order_Switch_Admin
 			'_ebanx_subscription_switch_condition',
 		];
 		foreach ($keys as $key) {
-			if (!empty($raw_data[$key])) {
-				update_post_meta($post_id, $key, $raw_data[$key]);
-			} else {
+			if (empty($raw_data[$key])) {
 				delete_post_meta($post_id, $key);
+				continue;
 			}
+
+			update_post_meta($post_id, $key, $raw_data[$key]);
 		}
 	}
 }

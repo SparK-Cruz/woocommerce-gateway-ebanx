@@ -66,15 +66,10 @@ class WC_EBANX_One_Click {
 
 		WC_EBANX::log('intializing');
 
-		global $woocommerce;
-
 		try {
 			$this->load_data();
 
 			$product_id = WC_EBANX_Request::read( 'ebanx-product-id' );
-			$product = wc_get_product( $product_id );
-
-			$user_addresses = $this->get_user_addresses();
 
 			wc_empty_cart();
 
@@ -253,11 +248,7 @@ class WC_EBANX_One_Click {
 
 			$title = $product->get_name();
 
-			if( ! empty($attrs['button_text']) ){
-				$button_text = $attrs['button_text'];
-			} else {
-				$button_text = __( 'One click purchase', 'woocommerce-gateway-ebanx' );
-			}
+			$button_text = empty($attrs['button_text']) ? __( 'One click purchase', 'woocommerce-gateway-ebanx' ) : $attrs['button_text'];
 
 			$args = apply_filters( 'ebanx_template_args', array(
 				'product_id' 			=> $product->get_id(),

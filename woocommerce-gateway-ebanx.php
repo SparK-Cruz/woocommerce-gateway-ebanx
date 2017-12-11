@@ -86,7 +86,7 @@ if ( ! class_exists('WC_EBANX') ) {
 			 */
 			$this->includes();
 
-			$configs = new WC_EBANX_Global_Gateway();
+			new WC_EBANX_Global_Gateway();
 
 			/**
 			 * Actions
@@ -557,10 +557,10 @@ if ( ! class_exists('WC_EBANX') ) {
 		 */
 		public function ebanx_metabox_payment_link_save ($post_id) {
 			$order = wc_get_order( $post_id );
+			$checkout_url = '';
+
 			if( is_a( $order, 'WC_Order' ) ) {
 				$checkout_url = get_post_meta($order->get_id(), '_ebanx_checkout_url', true);
-			} else {
-				$checkout_url = '';
 			}
 
 			// Check if is an EBANX request

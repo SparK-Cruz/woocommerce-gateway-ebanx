@@ -33,11 +33,6 @@ abstract class WC_EBANX_Redirect_Gateway extends WC_EBANX_Gateway
 		$this->redirect_url = $redirect;
 	}
 
-	/**
-	 * Dispatch an array to request, always dispatch success
-	 *
-	 * @return array
-	 */
 	final protected function dispatch($data)
 	{
 		return parent::dispatch(array(

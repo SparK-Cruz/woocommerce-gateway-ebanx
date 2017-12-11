@@ -66,9 +66,8 @@ class WC_EBANX_Subscription_Product_Switch_Admin
 	/**
 	 * @param int $post_id
 	 * @param int|WP_Post $post
-	 * @param bool $update
 	 */
-	public static function save_post($post_id, $post, $update)
+	public static function save_post($post_id, $post)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
 			return;
@@ -83,11 +82,12 @@ class WC_EBANX_Subscription_Product_Switch_Admin
 			'_ebanx_subscription_switch_product_hidden',
 		];
 		foreach ($keys as $key) {
-			if (!empty($post_data[$key])) {
-				update_post_meta($post_id, $key, $post_data[$key]);
-			} else {
+			if (empty($post_data[$key])) {
 				delete_post_meta($post_id, $key);
+				continue;
 			}
+
+			update_post_meta($post_id, $key, $post_data[$key]);
 		}
 	}
 }

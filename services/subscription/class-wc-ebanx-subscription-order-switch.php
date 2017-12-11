@@ -62,10 +62,9 @@ class WC_EBANX_Subscription_Order_Switch
 	 * @param bool $is_visible
 	 * @param int $variation_id
 	 * @param int $product_id
-	 * @param false|null|WC_Product $variation
 	 * @return bool
 	 */
-	public static function variation_is_visible($is_visible, $variation_id, $product_id, $variation)
+	public static function variation_is_visible($is_visible, $variation_id, $product_id)
 	{
 		if ($subscriptions = wcs_get_users_subscriptions()) {
 			foreach ($subscriptions as $subscription) {
@@ -87,10 +86,9 @@ class WC_EBANX_Subscription_Order_Switch
 
 	/**
 	 * @param WC_Subscription $subscription
-	 * @param WC_Order $order
 	 * @return null|bool
 	 */
-	public static function add_subscription_switch_meta($subscription, $order)
+	public static function add_subscription_switch_meta($subscription)
 	{
 		WC_EBANX::log(__METHOD__ . ' - starts');
 
@@ -280,11 +278,12 @@ class WC_EBANX_Subscription_Order_Switch
 		if ($new_order->needs_payment()) {
 			$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
 			ob_start();
-			$result = $available_gateways[$subscription->get_payment_method()]->process_payment($new_order->get_id());
+			$available_gateways[$subscription->get_payment_method()]->process_payment($new_order->get_id());
 			ob_get_clean();
-		} else {
-			$new_order->payment_complete();
+			return;
 		}
+
+		$new_order->payment_complete();
 	}
 }
 

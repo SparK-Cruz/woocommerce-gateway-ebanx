@@ -65,9 +65,8 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 	/**
 	 * @param int $post_id
 	 * @param int|WP_Post $post
-	 * @param bool $update
 	 */
-	public static function save_post($post_id, $post, $update)
+	public static function save_post($post_id, $post)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
 			return;
@@ -111,19 +110,18 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 			'_ebanx_subscription_recurrence_status',
 		];
 		foreach ($keys as $key) {
-			if (!empty($post_data[$key])) {
-				update_post_meta($post_id, $key, $post_data[$key]);
-			} else {
+			if (empty($post_data[$key])) {
 				delete_post_meta($post_id, $key);
+				continue;
 			}
+
+			update_post_meta($post_id, $key, $post_data[$key]);
 		}
 
 		$subscription = wcs_get_subscription($post_id);
 
 		// if deactivating, reset the expiration date
 		if ($do_deactivate) {
-			$product = WC_EBANX_Subscription_Common::get_subscription_product($subscription);
-
 #			$from_date = $subscription->get_date('date_created');
 #			$expiration_date = gmdate( 'Y-m-d H:i:s', wcs_add_time( WC_Subscriptions_Product::get_interval( $product_id ), WC_Subscriptions_Product::get_period( $product_id ), wcs_date_to_time( $from_date ) ) );
 			$expiration_date = gmdate('Y-m-d H:i:s', (strtotime($subscription->get_date('next_payment'), time()) + 5));
