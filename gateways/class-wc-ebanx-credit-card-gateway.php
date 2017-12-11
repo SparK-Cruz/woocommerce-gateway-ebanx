@@ -743,9 +743,9 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			WC_EBANX::get_templates_path()
 		);
 
+		$this->save_payment_method_checkbox();
+
 		if ( $display_tokenization ) {
-			// $this->save_payment_method_checkbox();
-			// force saving, as needed
 			printf(
 				'<input id="wc-%1$s-new-payment-method" name="wc-%1$s-new-payment-method" type="checkbox" value="true" checked="checked" readonly="readonly" style="display:none !important;" />',
 				esc_attr( $this->id )
