@@ -1256,12 +1256,4 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 
 		return $message;
 	}
-
-	// debugging methods
-	public static function d( $data ){
-		self::p( $data ); die();
-	}
-	public static function p( $data ){
-		echo '<pre>'; print_r( $data ); echo '</pre>';
-	}
 }

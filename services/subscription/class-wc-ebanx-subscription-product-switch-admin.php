@@ -90,13 +90,6 @@ class WC_EBANX_Subscription_Product_Switch_Admin
 			}
 		}
 	}
-
-	public static function p($a)
-	{
-		echo '<pre>';
-		print_r($a);
-		echo '</pre>';
-	}
 }
 
 # Intialize Admin Page

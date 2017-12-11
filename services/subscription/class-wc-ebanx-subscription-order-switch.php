@@ -14,7 +14,6 @@ class WC_EBANX_Subscription_Order_Switch
 		add_action('woocommerce_variation_is_visible', __CLASS__ . '::variation_is_visible', 40, 4);
 		add_action('woocommerce_checkout_subscription_created', __CLASS__ . '::add_subscription_switch_meta', 20, 2);
 		add_action('woocommerce_scheduled_subscription_payment', __CLASS__ . '::maybe_switch_subscription', 0, 1);
-		add_action('admin_init', __CLASS__ . '::debug');
 	}
 
 	/**
@@ -123,17 +122,6 @@ class WC_EBANX_Subscription_Order_Switch
 		WC_EBANX::log(__METHOD__ . ' - switch data created');
 
 		return null;
-	}
-
-	public static function debug()
-	{
-		if (isset($_REQUEST['debug'])) {
-			#$order = wc_get_order(13947);
-			#$subscription = wcs_get_subscription(13948);
-			#self::add_subscription_switch_meta( $subscription, $order );
-			self::maybe_switch_subscription(14161);
-			die();
-		}
 	}
 
 	/**
@@ -297,13 +285,6 @@ class WC_EBANX_Subscription_Order_Switch
 		} else {
 			$new_order->payment_complete();
 		}
-	}
-
-	public static function p($a)
-	{
-		echo '<pre>';
-		print_r($a);
-		echo '</pre>';
 	}
 }
 

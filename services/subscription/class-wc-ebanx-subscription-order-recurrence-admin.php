@@ -140,13 +140,6 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 			$subscription->add_order_note('Recurrence Activated');
 		}
 	}
-
-	public static function p($a)
-	{
-		echo '<pre>';
-		print_r($a);
-		echo '</pre>';
-	}
 }
 
 # Intialize Admin Page
