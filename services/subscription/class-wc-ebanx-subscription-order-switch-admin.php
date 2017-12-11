@@ -68,6 +68,11 @@ class WC_EBANX_Subscription_Order_Switch_Admin
 		return $data;
 	}
 
+	/**
+	 * @param int $post_id
+	 * @param int|WP_Post $post
+	 * @param bool $update
+	 */
 	public static function save_post($post_id, $post, $update)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

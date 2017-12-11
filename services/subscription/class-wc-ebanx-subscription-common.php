@@ -10,11 +10,11 @@ class WC_EBANX_Subscription_Common
 	public static function get_subscription_product_parent($subscription)
 	{
 		$product = self::get_subscription_product($subscription);
-		if ($product && $product->get_parent_id()) {
-			$product = wc_get_product($product->get_parent_id());
+		if (!$product || !$product->get_parent_id()) {
+			return $product;
 		}
 
-		return $product;
+		return wc_get_product($product->get_parent_id());
 	}
 
 	public static function get_subscription_product($subscription)

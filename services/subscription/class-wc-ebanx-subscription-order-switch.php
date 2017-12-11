@@ -17,6 +17,11 @@ class WC_EBANX_Subscription_Order_Switch
 		add_action('admin_init', __CLASS__ . '::debug');
 	}
 
+	/**
+	 * @param string $text
+	 * @param WC_Product_Subscription $product
+	 * @return string
+	 */
 	public static function single_add_to_cart_text($text, $product)
 	{
 		if ($product->is_type('variable-subscription') && $subscriptions = wcs_get_users_subscriptions()) {
@@ -35,7 +40,14 @@ class WC_EBANX_Subscription_Order_Switch
 		return $text;
 	}
 
-	// on subscription payment hook, we perform autoswitch
+	/**
+	 * On subscription payment hook, we perform autoswitch
+	 *
+	 * @param bool $hide
+	 * @param int $product_id
+	 * @param false|null|WC_Product $variation
+	 * @return bool
+	 */
 	public static function hide_invisible_variations($hide, $product_id, $variation)
 	{
 		$switch_product_id = get_post_meta($product_id, '_ebanx_subscription_switch_product_id', 1);
@@ -47,6 +59,13 @@ class WC_EBANX_Subscription_Order_Switch
 		return $hide;
 	}
 
+	/**
+	 * @param bool $is_visible
+	 * @param int $variation_id
+	 * @param int $product_id
+	 * @param false|null|WC_Product $variation
+	 * @return bool
+	 */
 	public static function variation_is_visible($is_visible, $variation_id, $product_id, $variation)
 	{
 		if ($subscriptions = wcs_get_users_subscriptions()) {
@@ -66,6 +85,12 @@ class WC_EBANX_Subscription_Order_Switch
 	}
 
 	// after subscription is created, through order checkout, we set auto_switch data
+
+	/**
+	 * @param WC_Subscription $subscription
+	 * @param WC_Order $order
+	 * @return null|bool
+	 */
 	public static function add_subscription_switch_meta($subscription, $order)
 	{
 		WC_EBANX::log(__METHOD__ . ' - starts');
@@ -96,6 +121,8 @@ class WC_EBANX_Subscription_Order_Switch
 		update_post_meta($subscription->get_id(), '_ebanx_subscription_switch_condition', $switch_condition);
 		update_post_meta($subscription->get_id(), '_ebanx_subscription_switch_created', current_time('mysql', 1));
 		WC_EBANX::log(__METHOD__ . ' - switch data created');
+
+		return null;
 	}
 
 	public static function debug()
@@ -109,6 +136,10 @@ class WC_EBANX_Subscription_Order_Switch
 		}
 	}
 
+	/**
+	 * @param int $subscription_id
+	 * @return null|bool
+	 */
 	public static function maybe_switch_subscription($subscription_id)
 	{
 		WC_EBANX::log('WC_EBANX_Subscription_Order_Switch::maybe_switch_subscription - start');
@@ -174,6 +205,8 @@ class WC_EBANX_Subscription_Order_Switch
 				break;
 		}
 		WC_EBANX::log('Switch condition not matched');
+
+		return null;
 	}
 
 	public static function process_subscription_switch($subscription)

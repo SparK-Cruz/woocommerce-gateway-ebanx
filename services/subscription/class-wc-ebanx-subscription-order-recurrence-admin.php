@@ -19,8 +19,6 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 
 	public static function add_meta_boxes()
 	{
-
-		$post_id = get_the_ID();
 		add_meta_box(
 			'woocommerce-subscription-recurrence',
 			_x('Subscription Recurrence', 'meta box title', 'woocommerce-subscriptions'),
@@ -64,6 +62,11 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 		return $data;
 	}
 
+	/**
+	 * @param int $post_id
+	 * @param int|WP_Post $post
+	 * @param bool $update
+	 */
 	public static function save_post($post_id, $post, $update)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

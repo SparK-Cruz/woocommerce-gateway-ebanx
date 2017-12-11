@@ -19,7 +19,12 @@ class WC_EBANX_Subscription_Product_Switch_Admin
 		add_action('save_post', __CLASS__ . '::save_post', 90, 3);
 	}
 
-	// ajax handlers
+	/**
+	 * Ajax handlers
+	 *
+	 * @param array $tabs
+	 * @return array
+	 */
 	public static function product_data_tabs($tabs)
 	{
 		$tabs['variable-subscription-switch'] = [
@@ -58,6 +63,11 @@ class WC_EBANX_Subscription_Product_Switch_Admin
 		);
 	}
 
+	/**
+	 * @param int $post_id
+	 * @param int|WP_Post $post
+	 * @param bool $update
+	 */
 	public static function save_post($post_id, $post, $update)
 	{
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

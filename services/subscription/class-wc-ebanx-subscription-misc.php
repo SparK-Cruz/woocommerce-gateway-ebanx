@@ -14,12 +14,18 @@ class WC_EBANX_Subscription_Misc
 
 	function __construct()
 	{
-		// virtual subscription product does not need processing
 		add_filter('woocommerce_order_item_needs_processing', __CLASS__ . '::order_item_needs_processing', 10, 3);
-		// display card last4 number on myaccount subscriptions page
 		add_filter('woocommerce_get_order_item_totals', __CLASS__ . '::get_order_item_totals', 10, 2);
 	}
 
+	/**
+	 * Virtual subscription product does not need processing
+	 *
+	 * @param bool $needs_processing
+	 * @param WC_Product $product
+	 * @param int $order
+	 * @return bool
+	 */
 	public static function order_item_needs_processing($needs_processing, $product, $order)
 	{
 		if ($product->is_type(['subscription', 'subscription_variation']) && $product->is_virtual()) {
@@ -29,6 +35,13 @@ class WC_EBANX_Subscription_Misc
 		return $needs_processing;
 	}
 
+	/**
+	 * Display card last4 number on myaccount subscriptions page
+	 *
+	 * @param array $total_rows
+	 * @param WC_Subscription $subscription
+	 * @return mixed
+	 */
 	public static function get_order_item_totals($total_rows, $subscription)
 	{
 		if ('shop_subscription' == $subscription->get_type() && is_account_page() && $subscription->get_parent_id()) {
