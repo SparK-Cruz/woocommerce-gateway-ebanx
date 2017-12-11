@@ -83,7 +83,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 	 * scheduled_subscription_payment function.
 	 *
 	 * @param $amount_to_charge float The amount to charge.
-	 * @param $renewal_order WC_Order A WC_Order object for renewal payment.
+	 * @param $order WC_Order A WC_Order object for renewal payment.
 	 */
 	public function scheduled_subscription_payment( $amount_to_charge, $order )
 	{
@@ -94,19 +94,18 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		if ( is_wp_error( $result ) ) {
 			$order->add_order_note( sprintf( __( 'Ebanx Transaction Failed (%s)', 'woocommerce-gateway-ebanx' ), $result->get_error_message() ) );
 			WC_Subscriptions_Manager::process_subscription_payment_failure_on_order( $order );
-		} else {
-			WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
+			return;
 		}
+
+		WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
 	}
 
 	/**
-	 * process_subscription_payment function.
 	 * @param mixed $order
-	 * @param int $amount (default: 0)
-	 * @param  bool initial_payment
+	 * @throws Exception
 	 */
 
-	public function process_subscription_payment( $order, $amount = 0 )
+	public function process_subscription_payment($order)
 	{
 		WC_EBANX::log( 'WC_EBANX_Credit_Card_Gateway::process_subscription_payment' );
 
@@ -230,6 +229,10 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 		}
 	}
 
+	/**
+	 * @param $order_id
+	 * @return bool
+	 */
 	public function cancel_payment_action( $order_id )
 	{
 		$order = wc_get_order($order_id);
@@ -248,14 +251,16 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			));
 
 			$response = \Ebanx\Ebanx::doCancel(array('hash' => get_post_meta($order->get_id(), '_ebanx_payment_hash', true)));
-			if ($request->status === 'SUCCESS') {
-				$order->add_order_note( __( 'EBANX: Charge refunded', 'woocommerce-gateway-ebanx' ));
-			} else {
+			if ($response->status !== 'SUCCESS') {
 				$order->add_order_note( __( 'EBANX: Unable to refund', 'woocommerce-gateway-ebanx' ));
+				return false;
 			}
+				$order->add_order_note( __( 'EBANX: Charge refunded', 'woocommerce-gateway-ebanx' ));
 		} catch( Exception $e){
 
 		}
+
+		return true;
 	}
 
 	/**
@@ -694,7 +699,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			return;
 		}
 
-		$user			  	 	= wp_get_current_user();
 		$display_tokenization 	= $this->supports( 'tokenization' ) && is_checkout() && $this->save_card_data;
 		$cart_total 			= WC()->cart->total;
 
