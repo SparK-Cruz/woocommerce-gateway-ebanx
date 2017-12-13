@@ -375,7 +375,7 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			&& empty(WC_EBANX_Request::read('ebanx_device_fingerprint', null)) 
 			&& empty(WC_EBANX_Request::read('ebanx_pay_by_token', null) ) 
 		) {
-			wc_add_notice( __( 'Missing device fingerprint, please reload.', 'woocommerce' ), 'error' );
+			wc_add_notice( __( 'Missing device fingerprint, please reload.', 'woocommerce-gateway-ebanx' ), 'error' );
 			return;
 		}
 		else if( 
