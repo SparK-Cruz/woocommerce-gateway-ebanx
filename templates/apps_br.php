@@ -1,5 +1,5 @@
 <div class="ebanx-badges">
-	<p><?php _e( 'Download the app for IOS or Android from the EBANX Account.', 'woocommerce-gateway-ebanx' ); ?></p>
+	<p>Baixe o app para IOS ou Android da Conta EBANX.</p>
 
 	<p>
 		<a href="https://goo.gl/4ZvNW9" title="Google Play" target="_blank">

@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WooCommerce EBANX Gateway
- * Plugin URI: https://w4dev.com
- * Description: Ebanx Payment Gateway
- * Author: Shazzad Hossain Khan
- * Author URI: https://w4dev.com
- * Version: 1.6
+ * Plugin Name: EBANX Payment Gateway for WooCommerce
+ * Plugin URI: https://www.ebanx.com/business/en/developers/integrations/extensions-and-plugins/woocommerce-plugin
+ * Description: Offer Latin American local payment methods & increase your conversion rates with the solution used by AliExpress, AirBnB and Spotify in Brazil.
+ * Author: EBANX
+ * Author URI: https://www.ebanx.com/business/en
+ * Version: 1.22.0
  * License: MIT
  * Text Domain: woocommerce-gateway-ebanx
  * Domain Path: /languages

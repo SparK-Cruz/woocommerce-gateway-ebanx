@@ -4,8 +4,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
-
+class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway
+{
 	/**
 	 * Constructor
 	 */
@@ -14,8 +14,8 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
 		$this->id 				= 'ebanx-credit-card-co';
 		$this->method_title 	= __('EBANX - Credit Card Colombia', 'woocommerce-gateway-ebanx');
 		$this->currency_code 	= WC_EBANX_Constants::CURRENCY_CODE_COP;
-		$this->title       		= __('Credit Cart (EBANX)', 'woocommerce-gateway-ebanx' );
-		$this->description 		= __('Pay by credit card.', 'woocommerce-gateway-ebanx' );
+		$this->title       		= 'Tarjeta de Crédito';
+		$this->description 		= 'Pay with credit card.';
 
 		parent::__construct();
 
@@ -51,7 +51,12 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway {
 		parent::payment_fields();
 
 		if ( ! is_add_payment_method_page() ) {
-			parent::checkout_rate_conversion( WC_EBANX_Constants::CURRENCY_CODE_COP, true, null, 1 );
+			parent::checkout_rate_conversion(
+				WC_EBANX_Constants::CURRENCY_CODE_COP,
+				true,
+				null,
+				1
+			);
 		}
 	}
 }

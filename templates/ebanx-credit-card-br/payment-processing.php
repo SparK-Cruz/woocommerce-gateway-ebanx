@@ -14,12 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="ebanx-thank-you-page ebanx-thank-you-page--br ebanx-thank-you-page--cc-br">
 	<?php if ($instalments_number > 1) : ?>
-    	<p><?php printf( __('%s\'s payment of %s, in installments of %sx %s, was approved.', 'woocommerce-gateway-ebanx' ) , $customer_name, $total, $instalments_number, $instalments_amount ); ?></p>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, parcelado em <?= $instalments_number ?>x de <?= $instalments_amount ?>, foi aprovado o/</strong></p>
 	<?php else: ?>
-    	<p><?php printf( __('%s\'s payment of %s.', 'woocommerce-gateway-ebanx' ) , $customer_name, $total ); ?></p>
+		<p><strong><?= $customer_name ?> seu pagamento de <?= $total ?>, à vista, foi aprovado o/</strong></p>
 	<?php endif ?>
 
-	<p><?php printf( __( 'If you have any questions regarding your payment, access the EBANX Account with %s.', 'woocommerce-gateway-ebanx' ), $customer_email ); ?></p>
+	<p>Se tiver alguma dúvida em relação ao seu pagamento, acesse a Conta EBANX com o email <strong><?= $customer_email ?></strong>.</p>
 
 	<?php include WC_EBANX::get_templates_path() . 'apps_br.php' ?>
 </div>

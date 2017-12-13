@@ -35,7 +35,6 @@ class WC_EBANX_Hooks {
 	public static function payment_status_hook_action() {
 		ob_start();
 
-
 		if ( ( WC_EBANX_Request::has('operation')
 			&& WC_EBANX_Request::read('operation') == 'payment_status_change'
 			&& WC_EBANX_Request::has('notification_type')
