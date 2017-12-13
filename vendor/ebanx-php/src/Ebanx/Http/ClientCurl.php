@@ -57,7 +57,7 @@ class ClientCurl extends AbstractClient
                 if (curl_errno($this->curl)) {
                     throw new \RuntimeException('The HTTP request failed: ' . curl_error($this->curl));
                 }
-                throw new \RuntimeException('The HTTP request failed: Status code - '. curl_getinfo($this->curl, CURLINFO_HTTP_CODE) );
+                throw new \RuntimeException('The HTTP request failed: unknown error.');
             }
             curl_close($this->curl);
 
