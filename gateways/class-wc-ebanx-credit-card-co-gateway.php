@@ -50,13 +50,15 @@ class WC_EBANX_Credit_Card_CO_Gateway extends WC_EBANX_Credit_Card_Gateway
 	public function payment_fields() {
 		parent::payment_fields();
 
-		if ( ! is_add_payment_method_page() ) {
-			parent::checkout_rate_conversion(
-				WC_EBANX_Constants::CURRENCY_CODE_COP,
-				true,
-				null,
-				1
-			);
+		if (is_add_payment_method_page()) {
+			return;
 		}
+
+		parent::checkout_rate_conversion(
+			WC_EBANX_Constants::CURRENCY_CODE_COP,
+			true,
+			null,
+			1
+		);
 	}
 }
