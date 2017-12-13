@@ -122,13 +122,7 @@ class WC_EBANX_Subscription_Order_Recurrence_Admin
 
 		// if deactivating, reset the expiration date
 		if ($do_deactivate) {
-#			$from_date = $subscription->get_date('date_created');
-#			$expiration_date = gmdate( 'Y-m-d H:i:s', wcs_add_time( WC_Subscriptions_Product::get_interval( $product_id ), WC_Subscriptions_Product::get_period( $product_id ), wcs_date_to_time( $from_date ) ) );
 			$expiration_date = gmdate('Y-m-d H:i:s', (strtotime($subscription->get_date('next_payment'), time()) + 5));
-			#echo $expiration_date;
-			#die();
-
-			#$expiration_date = WC_Subscriptions_Product::get_expiration_date( $product, $subscription->get_date('date_created') );
 			$subscription->update_dates(['end' => $expiration_date]);
 			$subscription->add_order_note('Recurrence Deactived');
 

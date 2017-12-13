@@ -1136,8 +1136,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			|| $this->configs->get_setting_or_default('show_local_amount', 'yes') !== 'yes') {
 			return;
 		}
-
-		#WC()->cart->get_cart_from_session();
 		$amount = WC()->cart->total;
 
 		$amount = apply_filters('ebanx_get_custom_total_amount', $amount, $instalments);
@@ -1188,9 +1186,6 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 		if ($instalments !== null) {
 			$instalment_price = $amount / $instalments;
 			$instalment_price = round(floatval($instalment_price), 2);
-			#print_r( $amount ); 
-			#echo '<br>'; print_r( $amount ); die();
-			#$amount = $instalment_price;
 			$amount = $instalment_price * $instalments;
 		}
 

@@ -62,8 +62,6 @@ class WC_EBANX_One_Click {
 			return;
 		}
 
-		# echo '<pre>'; print_r($_REQUEST); echo '</pre>';die();
-
 		WC_EBANX::log('intializing');
 
 		try {
@@ -105,16 +103,6 @@ class WC_EBANX_One_Click {
 			}
 			$order = wc_get_order( $order_id );
 			do_action( 'woocommerce_checkout_order_processed', $order_id, $post_data, $order );
-
-#			echo '<pre>'; print_r(WC()->checkout); echo '</pre>';die();
-#			$order->add_product( $product, 1 );
-#			$order->set_address( $user_addresses['shipping'], 'shipping' );
-#			$order->set_address( $user_addresses['billing'], 'billing' );
-#			$order->set_payment_method( $this->gateway );
-#			$order->calculate_totals();
-#			$order->save();
-#			WC()->cart->empty_cart();
-#			echo '<pre>'; print_r(WC()->cart); echo '</pre>';die();
 
 			if ( wc_notice_count( 'error' ) == 0 ) {
 				if ( WC()->cart->needs_payment() ) {
@@ -165,8 +153,6 @@ class WC_EBANX_One_Click {
 				WC_EBANX_Request::set("{$type}_{$name}", $value );
 			}
 		}
-
-		# echo '<pre>'; print_r($_REQUEST); echo '</pre>';die();
 	}
 
 	/**

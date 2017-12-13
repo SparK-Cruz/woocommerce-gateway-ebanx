@@ -49,8 +49,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				}
 			}
 		}
-
-		#add_action( 'woocommerce_order_edit_status', array($this, 'capture_payment_action'), 10, 2 );
 		
 		add_action( 'woocommerce_order_status_on-hold_to_processing', array( $this, 'capture_payment_action' ) );
 		add_action( 'woocommerce_order_status_on-hold_to_completed', array( $this, 'capture_payment_action' ) );
@@ -61,9 +59,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			add_action( 'woocommerce_checkout_subscription_created', array( $this, 'checkout_subscription_created' ), 10, 2 );
 			add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment' ), 10, 2 );
 		}
-
-		# $order = wc_get_order(14122);
-		# $this->process_subscription_payment( $order, 90.00 );
 	}
 
 	public function checkout_subscription_created( $subscription, $order )
@@ -159,8 +154,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 			WC_EBANX_Request::set('ebanx_billing_chile_document', $document );
 		}
-
-		#$this->d( $_REQUEST );
 
 		$return = $this->process_payment( $order->get_id() );
 
@@ -360,8 +353,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			}
 		}
 
-		# $this->d($_REQUEST);
-
 		$names = $this->names;
 		if( empty(WC_EBANX_Request::read('ebanx_token', null) )
 			|| empty(WC_EBANX_Request::read('ebanx_masked_card_number', null))
@@ -390,7 +381,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 				&& ! WC_EBANX_Request::has($names['ebanx_billing_chile_document'])
 			)
 		){
-			#throw new Exception('MISSING-DOCUMENT');
 			wc_add_notice( __( 'Missing document.', 'woocommerce' ), 'error' );
 			return;
 		}
@@ -468,8 +458,6 @@ abstract class WC_EBANX_Credit_Card_Gateway extends WC_EBANX_Gateway
 			$data['payment']['creditcard']['card_cvv'] = WC_EBANX_Request::read('ebanx_billing_cvv');
 		}
 		$data['payment']['creditcard']['auto_capture'] = ($this->configs->settings['capture_enabled'] === 'yes');
-
-		#$this->d( $data );
 
 		return $data;
 	}
