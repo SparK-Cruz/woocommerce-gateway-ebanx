@@ -1242,8 +1242,7 @@ class WC_EBANX_Gateway extends WC_Payment_Gateway
 			),
 		);
 
-		#$message = $texts[$language]['INTRO'];
-		$message = __('Total payable ', 'woocommerce-gateway-ebanx' );
+		$message = $texts[$language]['INTRO'];
 		$message .= !empty($texts[$language][$currency]) ? $texts[$language][$currency] : $currency;
 		$message .= ': <strong class="ebanx-amount-total">' . $price . '</strong>';
 
